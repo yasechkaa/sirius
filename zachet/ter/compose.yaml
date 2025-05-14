@@ -1,0 +1,26 @@
+services:
+  loadbalancer:
+    image: nginx:alpine
+    ports:
+      - "8088:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - core-service
+      - user-service
+
+  core-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    expose:
+      - "80"
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.user
+    expose:
+      - "80"
+      
